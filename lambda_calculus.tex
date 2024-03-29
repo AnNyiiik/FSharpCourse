@@ -1,0 +1,10 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+
+\begin{document}
+
+\section{Normalize}
+\begin{math}((\lambda a. (\lambda b.b \ b) \ (\lambda b.b \ b))\ b)\ ((\lambda c.(c\ b)) \ (\lambda a. a)) \ \rightarrow_{\beta} ((\lambda b.b \ b) \ (\lambda b.b \ b)) \ ((\lambda c.(c\ b)) \ (\lambda a. a)) \rightarrow_{\beta} ((\lambda b.b \ b) \ (\lambda b.b \ b)) ((\lambda a. a) \ b) \ \rightarrow_{\beta} ((\lambda b.b \ b) \ (\lambda b.b \ b)) \ b
+\section{SKK}
+\begin{math}((\lambda x\ y\ z.x\ z\ (y\ z))\  (\lambda x\ y . x))\ (\lambda x\ y . x)\  \rightarrow_{\alpha} ((\lambda x\ y\ z.x\ z\ (y\ z))\  (\lambda a\ b . a))\ (\lambda m\ p . m)\  \rightarrow_{\beta} ((\lambda y\ z.(\lambda a \ b.a)\ z\ (y\ z))\ (\lambda m\ p . m)\ \rightarrow_{\beta} \lamda z.(\lambda a \ b.a)\ z \ ((\lamda m\ p. m)\ z)) \ \rightarrow{\beta} \lambda z.z\end{math}
+\end{document}
