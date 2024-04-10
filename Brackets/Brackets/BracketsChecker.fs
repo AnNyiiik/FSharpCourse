@@ -13,9 +13,7 @@ module Brackets =
                 | ']' | '}' | ')' ->
                     if (String.length stack = 0) then false
                     else
-                        if ((bracket = ')' && stack.[0] = '(') ||
-                        (bracket = ']' && stack.[0] = '[') ||
-                        (bracket = '}' && stack.[0] = '{')) then
+                        if ((bracket = ')' && stack.[0] = '(') || (bracket = ']' && stack.[0] = '[') || (bracket = '}' && stack.[0] = '{')) then
                             checkRec sequence stack.[1..(String.length stack - 1)] (position + 1)
                         else false
                 | _ -> checkRec sequence stack (position + 1)
