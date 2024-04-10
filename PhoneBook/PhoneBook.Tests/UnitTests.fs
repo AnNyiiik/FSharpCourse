@@ -15,6 +15,13 @@ let data  =
         new Person("Sara", "81278918789")
     ]
 
+let dataString = "Tom 89019892909
+Alice 83890198101
+John 82839281789
+Bob +72898271890
+Hanna +71289019813
+Sara 81278918789"
+
 let comparePersons (p1 : Person)  (p2 : Person) =
     if p1.Name < p2.Name then -1 else
     if p1.Name = p2.Name then
@@ -33,8 +40,22 @@ let ``test add record basic`` () =
         new Person("Hanna", "+71289019813");
         new Person("Sara", "81278918789");
         new Person("Julia", "+79110606382")]
-    let t1 = correctResult.GetType()
-    
     let actual = List.sortWith comparePersons newData
-    let t2 = actual.GetType()
     Assert.That(actual, Is.EqualTo(correctResult))
+
+[<Test>]
+let ``test find name by phone`` () =
+    findByPhone "82839281789" data |> should equal "John"
+    findByPhone "82839281780" data |> should equal "there is no such phone"
+
+[<Test>]
+let ``test find name by name`` () =
+    findByName "Sara" data |> should equal "81278918789"
+    findByName "Kat" data |> should equal "there is no such name"
+
+[<Test>]
+let ``test read from file`` () =
+    let dataEmpty = []
+    fill dataString dataEmpty |> List.sortWith comparePersons |> should
+        equal
+        (List.sortWith comparePersons data)

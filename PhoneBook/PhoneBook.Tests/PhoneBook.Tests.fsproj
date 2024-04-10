@@ -29,4 +29,7 @@
   <ItemGroup>
     <ProjectReference Include="..\PhoneBook\PhoneBook.fsproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="readTest.txt" />
+  </ItemGroup>
 </Project>
