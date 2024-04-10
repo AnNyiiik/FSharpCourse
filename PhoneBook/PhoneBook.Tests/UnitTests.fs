@@ -15,13 +15,7 @@ let data  =
         new Person("Sara", "81278918789")
     ]
 
-let dataString = "Tom 89019892909
-Alice 83890198101
-John 82839281789
-Bob +72898271890
-Hanna +71289019813
-Sara 81278918789"
-
+let dataString = " Tom 89019892909 \n Alice 83890198101 \n John 82839281789 \n Bob +72898271890 \n Hanna +71289019813 \n Sara 81278918789 \n"
 let comparePersons (p1 : Person)  (p2 : Person) =
     if p1.Name < p2.Name then -1 else
     if p1.Name = p2.Name then
@@ -59,3 +53,8 @@ let ``test read from file`` () =
     fill dataString dataEmpty |> List.sortWith comparePersons |> should
         equal
         (List.sortWith comparePersons data)
+
+[<Test>]
+let ``test convert data to string`` () =
+    let res = convertDataToString data
+    convertDataToString data |> should equal dataString
