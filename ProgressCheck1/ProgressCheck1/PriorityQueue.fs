@@ -6,6 +6,8 @@ module PriorityQueue =
 
         let mutable items = []
 
+        let lockObject = obj
+
         member this.Clear() =
             items <- []
 
@@ -15,19 +17,22 @@ module PriorityQueue =
                 | [] -> [x]
                 | y::tail when comparer x y > 0 -> x::y::tail
                 | y::tail -> y::insert tail x
-            items <- insert items item
-
+            lock lockObject (fun () -> (items <- insert items item))
+            
         member this.Dequeue() =
-            match items with
-            | [] -> failwith "Queue is empty"
-            | head::tail ->
-                items <- tail
-                head
-
+            lock lockObject (fun () ->
+                match items with
+                | [] -> failwith "Queue is empty"
+                | head::tail ->
+                    items <- tail
+                    head)
+            
         member this.Peek() =
-            match items with
-            | [] -> failwith "Queue is empty"
-            | head::_ -> head
+            lock lockObject (fun () ->
+                match items with
+                | [] -> failwith "Queue is empty"
+                | head::_ -> head
+            )
 
         member this.IsEmpty =
-            List.length items = 0
+            lock lockObject (fun () -> (List.length items = 0))
