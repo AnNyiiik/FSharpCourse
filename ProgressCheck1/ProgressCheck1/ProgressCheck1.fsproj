@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Fibonachi.fs" />
     <Compile Include="PriorityQueue.fs" />
-    <Compile Include="Fibinachi.fs" />
     <Compile Include="SquarePrinter.fs" />
   </ItemGroup>
 
