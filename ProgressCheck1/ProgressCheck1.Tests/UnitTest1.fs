@@ -6,9 +6,9 @@ open ProgressCheck1.Fibonachi
 open ProgressCheck1.PrintSquare
 open ProgressCheck1.PriorityQueue
 
-//[<Test>]
-//let TestFibonachi () =
-//    countSumFibEven() |> should equal 1089154
+[<Test>]
+let TestFibonachi () =
+    countSumFibEven() |> should equal 1089154
 
 let squaresCases =
     seq{
@@ -28,15 +28,15 @@ let TestEnqueue () =
     queue.Enqueue(1)
     assert not queue.IsEmpty
 
-//[<Test>]
-//let ``dequeue from empty queue throws exception`` () =
-//    queue.Clear()
-//    queue.Dequeue() |> should throw typeof<System.Exception>
+[<Test>]
+let ``dequeue from empty queue throws exception`` () =
+    queue.Clear()
+    (fun () -> queue.Dequeue() |> ignore) |> should throw typeof<System.Exception>
 
 [<Test>]
 let ``peek with empty queue throws exception`` () =
      queue.Clear()
-     queue.Peek() |> should throw typeof<System.Exception> 
+     (fun () -> queue.Peek() |> ignore) |> should throw typeof<System.Exception>
 
 [<SetUp>]
 let fillQueue () =
@@ -47,10 +47,8 @@ let fillQueue () =
 
 [<Test>]
 let TestDequeue () =
-    let l = queue.Dequeue()
     queue.Dequeue() |> should equal 2
 
 [<Test>]
 let TestPeek () =
-    let l = queue.Peek()
     queue.Peek() |> should equal 2
