@@ -13,12 +13,11 @@ let TestFibonachi () =
 let squaresCases =
     seq{
         TestCaseData(4, "****\n*  *\n*  *\n****")
-        TestCaseData(5, "*****\n*   *\n*   *\n*****")
+        TestCaseData(5, "*****\n*   *\n*   *\n*   *\n*****")
     }
         
 [<TestCaseSource("squaresCases")>]
 let TestSquare (n : int, answer : string) =
-    let ans = PrintSquare n
     PrintSquare n |> should equal answer
 
 let queue = new PriorityQueue<int>(fun n1 n2 -> compare n1 n2)
