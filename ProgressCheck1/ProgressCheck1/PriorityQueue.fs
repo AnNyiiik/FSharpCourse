@@ -6,6 +6,9 @@ module PriorityQueue =
 
         let mutable items = []
 
+        member this.Clear() =
+            items <- []
+
         member this.Enqueue(item : 'T) =
             let rec insert items x = 
                 match items with

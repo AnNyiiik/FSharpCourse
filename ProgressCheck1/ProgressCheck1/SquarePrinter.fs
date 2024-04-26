@@ -24,4 +24,4 @@ module PrintSquare =
             | (p : int) when (p = n - 1) -> (String.concat "\n" [square; boundary])
             | _ -> makeSquare (String.concat "\n" [square; inner]) (iter + 1) n
             
-        makeSquare boundary 0 n
+        makeSquare boundary 1 n
