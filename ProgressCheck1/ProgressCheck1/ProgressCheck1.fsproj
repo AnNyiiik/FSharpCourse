@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Fibonachi.fs" />
+    <Compile Include="PriorityQueue.fs" />
+    <Compile Include="SquarePrinter.fs" />
+  </ItemGroup>
+
+</Project>
