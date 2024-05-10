@@ -5,40 +5,36 @@ open System
 module Computer = 
 
     type Computer (macAdress : int, OS : string,
-        infectionProbability : float) =
+        infectionProbability : float, isDeseasedArg : bool) =
 
-        member this.macAdress = macAdress
+        let mutable neighbours : Computer list = []
+
+        member val macAdress = macAdress with get
 
         member val OS = OS with get
 
         member val infectionProbability = infectionProbability with get
 
-        member val isDeseased = false with get
-
-        member val neighbours = [] with get
+        member val isDeseased = isDeseasedArg with get, set
 
         static member random = new System.Random()
 
         member computer.addNeighbour (neighbour : Computer) =
-            neighbour :: computer.neighbours
+            neighbours <- neighbour :: neighbours
 
         member computer.getDeseased () =
 
-            let number = Computer.random.Next()
+            let number = Computer.random.Next(0, 100)
 
             let isDeseased = infectionProbability |> (*) 100.0 |> int |> (-) number |> (>) 0
 
-            computer.isDeseased = isDeseased
+            computer.isDeseased <- isDeseased
 
         member computer.SpreadVirus () =
 
-            let mutable getDeseased = false
-
-            List.iter (fun (neighbour : Computer) -> (getDeseased <- neighbour.getDeseased())) computer.neighbours
+            List.iter (fun (neighbour : Computer) -> (neighbour.getDeseased())) neighbours
 
         member computer.checkIfAllNeighboursAreDeseased () =
 
-            let mutable result = true
-
             List.forall (fun (neigbour : Computer) ->
-                (neigbour.isDeseased || neigbour.infectionProbability = 0.0)) computer.neighbours
+                (neigbour.isDeseased || neigbour.infectionProbability = 0.0)) neighbours
