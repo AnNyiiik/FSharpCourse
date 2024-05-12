@@ -5,6 +5,8 @@ VisualStudioVersion = 25.0.1706.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "HW_6", "HW_6\HW_6.fsproj", "{52EA7D0B-F67E-46E4-A1D3-2DD43F9C690A}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "HW_6.Tests", "HW_6.Tests\HW_6.Tests.fsproj", "{2140255C-4543-4BA8-9060-B81B47A780AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{52EA7D0B-F67E-46E4-A1D3-2DD43F9C690A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52EA7D0B-F67E-46E4-A1D3-2DD43F9C690A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52EA7D0B-F67E-46E4-A1D3-2DD43F9C690A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2140255C-4543-4BA8-9060-B81B47A780AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2140255C-4543-4BA8-9060-B81B47A780AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2140255C-4543-4BA8-9060-B81B47A780AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2140255C-4543-4BA8-9060-B81B47A780AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
