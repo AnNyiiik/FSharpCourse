@@ -27,7 +27,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\PointFree\PointFree.fsproj" />
-  </ItemGroup>
 </Project>
