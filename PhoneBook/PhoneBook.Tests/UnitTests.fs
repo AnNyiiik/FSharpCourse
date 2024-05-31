@@ -16,9 +16,9 @@ let data  =
     ]
 
 let comparePersons (p1 : Person)  (p2 : Person) =
-    if p1.Name < p2.Name then -1 else
-    if p1.Name = p2.Name then
-        if p1.Number < p2.Number then -1
+    if p1 < p2 then -1 else
+    if p1 = p2 then
+        if p1 < p2 then -1
         else 1
     else 1
 

@@ -11,7 +11,10 @@ module PhoneBook =
 
     let addRecord (person : Person) data =
         if List.exists(fun (p : Person) -> p.Number = person.Number) data
-        then data else person :: data
+        then
+            invalidArg "" "incorrect data: the number already exists"
+            data
+        else person :: data
 
     let findByPhone phone data =
         let result = List.tryFind(fun (p : Person) -> p.Number = phone) data
