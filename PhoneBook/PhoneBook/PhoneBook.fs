@@ -4,11 +4,10 @@ open System.Text.RegularExpressions
 
 module PhoneBook =
 
-    type Person =
-        val Name : string
-        val Number : string
+    type Person = { Name: string; Number: string }
 
-        new (name, phone) = { Name = name; Number = phone;}
+    let phone_regex () = Regex(@"(\+7|7|8)+\d{10}", RegexOptions.Compiled)
+    let name_regex () = Regex(@"[A-Z][a-z]+", RegexOptions.Compiled)
 
     let addRecord (person : Person) data =
         if List.exists(fun (p : Person) -> p.Number = person.Number) data
@@ -18,15 +17,15 @@ module PhoneBook =
         let result = List.tryFind(fun (p : Person) -> p.Number = phone) data
 
         match result with
-        | Some p -> p.Name
-        | None -> "there is no such phone"
+        | Some p -> Some p.Name
+        | None -> None
 
     let findByName name data =
         let result = List.tryFind(fun (p : Person) -> p.Name = name) data
         
         match result with
-        | Some p -> p.Number
-        | None -> "there is no such name"
+        | Some p -> Some p.Number
+        | None -> None
 
     let convertDataToString data =
         let rec convert data result =
@@ -37,17 +36,14 @@ module PhoneBook =
 
     let fill (personsString : string) data =
 
-        let phone_regex = Regex(@"(\+7|7|8)+\d{10}", RegexOptions.Compiled)
-        let name_regex = Regex(@"[A-Z][a-z]+", RegexOptions.Compiled)
-
         let persons = personsString.Split('\n')
         let rec addPersons (persons : list<string>) data =
             match persons with
             | [] -> data
             | head :: tail ->
                 let personData = (head.ToString()).Split([|' '|])
-                let newPerson = Person(personData.[0], personData.[1])
-                if not (phone_regex.IsMatch(personData.[1]) && name_regex.IsMatch(personData.[0])) then
+                let newPerson = {Name = personData.[0]; Number = personData.[1]}
+                if not (phone_regex().IsMatch(personData.[1]) && name_regex().IsMatch(personData.[0])) then
                     invalidArg "" "incorrect data format"
                 if (personData.Length) = 2 then addPersons tail (newPerson :: data)
                     else invalidArg "" "shold be 2 values per person"
