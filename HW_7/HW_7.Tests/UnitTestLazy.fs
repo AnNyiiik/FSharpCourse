@@ -1,9 +1,11 @@
 ﻿module HW_7.Tests
 
+open System.Net
 open NUnit.Framework
 open FsUnit
 open System
 open System.Threading
+open MiniCrawler
 open Lazy
 
 let random = Random()
@@ -54,3 +56,15 @@ let MultithreadTestFunction (createLazy: (unit -> 'a) -> ILazy<'a>) =
     let compare_item = Seq.item 0 results
 
     results |> Seq.forall (fun item -> obj.ReferenceEquals(item, compare_item)) |> should equal true
+
+[<Test>]
+let StandartTest () =
+    downloadAndPrintPageSize "https://my.spbu.ru/"
+    |> (Async.RunSynchronously)
+    |> Option.get
+    |> should equal "https://edu.spbu.ru/maps/map.html  107400"
+    
+[<Test>]
+let TestWithIncorrectUrl () =
+    (fun () -> downloadAndPrintPageSize "https://se.ma.su.ru/" |> Async.RunSynchronously |> ignore)
+    |> should throw typeof<WebException>
