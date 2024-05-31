@@ -3,7 +3,6 @@
 open FsUnit
 open NUnit.Framework
 open Brackets.Brackets
-//"([{[][{{}}[]]}[()((())[])]]{[]([][{}{}])})"
 let testCasesTrue =
     seq {
         yield (TestCaseData("[][{}([][(){()()}])]"))
@@ -14,6 +13,8 @@ let testCasesFalse =
         yield (TestCaseData("[]{{}}}"))
         yield (TestCaseData("[{(})]"))
         yield (TestCaseData("))(("))
+        yield (TestCaseData(")"))
+        yield (TestCaseData("("))
     }
 [<TestCaseSource("testCasesTrue")>]
 let ``Test cases true`` (sequence : string) =
