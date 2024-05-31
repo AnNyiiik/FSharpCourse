@@ -1,7 +1,7 @@
 ﻿namespace HW_7
 
 open System.IO
-open System.Net
+open System.Net.Http
 open System.Text.RegularExpressions
 open System.Threading.Tasks
 
@@ -9,14 +9,13 @@ module MiniCrawler =
     
     let downloadAndPrintPageSize (url: string) =
 
-        let readPage (link : string) =
+        let client = new HttpClient()
+        
+        let readPageAsync (link: string) =
             async {
-                let request = HttpWebRequest.Create(link)
-                use! response = request.AsyncGetResponse()
-                use reader = new StreamReader(response.GetResponseStream())
-                let html = reader.ReadToEnd()
-                return html
+                
             }
+
             
         async {
             try
