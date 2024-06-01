@@ -29,6 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Lambda_Interpreter\Lambda_Interpreter.fsproj" />
+    <ProjectReference Include="..\HW_3\HW_3.fsproj" />
   </ItemGroup>
 </Project>
