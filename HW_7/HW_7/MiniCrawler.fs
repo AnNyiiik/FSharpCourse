@@ -1,28 +1,32 @@
 ﻿namespace HW_7
 
-open System.IO
-open System.Net.Http
+open System.Net
 open System.Text.RegularExpressions
 open System.Threading.Tasks
+open System.Net.Http
 
 module MiniCrawler =
+
+    type IHttpClient =
+        abstract member GetAsync : string -> Task<HttpResponseMessage>
+
+    let readPage (client: IHttpClient) (link : string) =
+
+        async {
+           let! response = client.GetAsync(link) |> Async.AwaitTask
+           response.EnsureSuccessStatusCode() |> ignore
+           let! content = response.Content.ReadAsStringAsync() |> Async.AwaitTask
+           return content
+        }
     
-    let downloadAndPrintPageSize (url: string) =
+    let downloadAndPrintPageSize (client: IHttpClient) (url: string) =
 
-        let client = new HttpClient()
-        
-        let readPageAsync (link: string) =
-            async {
-                
-            }
-
-            
         async {
             try
-                let html = Async.RunSynchronously (readPage url)
+                let html = Async.RunSynchronously  (readPage client url)
                 
                 
-                let linkRegex = new Regex("<a\s+href=\"(http[s]?://[^\"#]+)\"", RegexOptions.IgnoreCase)
+                let linkRegex = new Regex("<a\s+href=\'(http[s]?://[^\'#]+)\'", RegexOptions.IgnoreCase)
                 let links = 
                     linkRegex.Matches(html)
                     |> Seq.cast<Match>
@@ -33,27 +37,14 @@ module MiniCrawler =
                     |> Seq.map (fun link -> 
                         async {
                             try
-                                let! content = readPage link 
-                                return Some (String.concat " " [link; content.Length.ToString()]) 
+                                let! content = readPage client link 
+                                return (link, Some content.Length) 
                             with
-                                | :? WebException -> return None
-                        } |> Async.StartAsTask) 
-                    |> Task.WhenAll 
-                    |> Async.AwaitTask 
+                                | :? HttpRequestException -> return (link, None)
+                        }) 
+                    |> Async.Parallel
 
-                let mutable result = ""
-                let mutable counter = 0
-
-                for content in content do
-                    match content with
-                    | Some string ->
-                        if (counter = 0) then 
-                            result <- String.concat "" [result; string]
-                            counter <- 1
-                        else
-                            result <- String.concat "\n" [result; string]
-                    | None -> ()
-                return Some result
+                return Some content 
             with
             | :? WebException -> 
                 raise (WebException "Incorrect url")

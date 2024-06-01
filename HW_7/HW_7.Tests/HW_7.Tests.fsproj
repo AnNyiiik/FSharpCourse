@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="UnitTestLazy.fs" />
+    <Compile Include="UnitTests.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
@@ -27,6 +27,9 @@
       <GeneratePathProperty></GeneratePathProperty>
     </PackageReference>
     <PackageReference Include="FsCheck" Version="2.16.6">
+      <GeneratePathProperty></GeneratePathProperty>
+    </PackageReference>
+    <PackageReference Include="Moq" Version="4.20.70">
       <GeneratePathProperty></GeneratePathProperty>
     </PackageReference>
   </ItemGroup>
