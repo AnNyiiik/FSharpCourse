@@ -22,19 +22,19 @@ let parseCommandCode () =
     Some code
 
 ///Add record to the existed records
-let rec ``add record`` data =
+let rec addNewRecord data =
     printfn "Enter name & phone: \n"
     let personData = Console.ReadLine().Split()
     if not (personData.Length = 2) then
         printfn "incorrect data, should be 2 items, try again\n"
-        ``add record`` data
+        addNewRecord data
 
     else if not (phoneRegex().IsMatch(personData.[1])) then
         printfn "incorrect phone number, try again\n"
-        ``add record`` data
+        addNewRecord data
     else if not (nameRegex().IsMatch(personData.[0])) then
         printfn "incorrect name, try again\n"
-        ``add record`` data
+        addNewRecord data
     else
         try
             let person = {Name = personData.[0]; Number = personData.[1]}
@@ -45,38 +45,38 @@ let rec ``add record`` data =
             data
             
 ///Find name by existed number
-let rec ``find name`` data =
+let rec findName data =
     printfn "enter the phone:\n"
     let phone = Console.ReadLine()
     if not(phoneRegex().IsMatch(phone)) then
         printfn "incorrect data, try again\n"
-        ``find name`` data
+        findName data
     else
         match findByName phone data with
         | None -> printfn "%s" "there is no such name\n"
         | Some name -> printfn "%s" (name.ToString())
 
 ///Find phone by name, return first coinsidence
-let rec ``find phone`` data =
+let rec findPhone data =
     printfn "enter the name:\n"
     let name = Console.ReadLine()
     if not(nameRegex().IsMatch(name)) then
         printfn "incorrect data, try again\n"
-        ``find phone`` data
+        findPhone data
     else
         match findByPhone name data with
         | None -> printfn "%s" "there is no such name\n"
         | Some name -> printfn "%s" (name.ToString())
 
 ///Write all the data to file
-let ``write to file`` data =
+let writeFile data =
     let path = "dataWrite.txt"
     use fileWriter = new StreamWriter(path)
     let dataToWrite = convertDataToString data
     fileWriter.Write(dataToWrite)
 
 ///Read the data from file
-let ``read from file`` data =
+let readFile data =
     let path = "dataRead.txt"
     use fileReader = new StreamReader(path)
     let readData = fileReader.ReadToEnd()
@@ -88,21 +88,21 @@ let rec runLoop data =
     match parseCommandCode() with
     | None | Some 0 -> Some data
     | Some 1 ->
-        runLoop (``add record`` data)
+        runLoop (addNewRecord data)
     | Some 2  ->
-        ``find phone`` data
+        findPhone data
         runLoop data
     | Some 3 ->
-        ``find name`` data
+        findName data
         runLoop data
     | Some 4 ->
         printfn "%s" (convertDataToString data)
         runLoop data
     | Some 5 ->
-        ``write to file`` data
+        writeFile data
         runLoop data
     | Some 6 ->
-        match (``read from file`` data) with
+        match (readFile data) with
         | None ->
             printf "incorrect data format in input file\n"
             None

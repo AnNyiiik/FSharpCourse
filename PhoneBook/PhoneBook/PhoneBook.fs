@@ -1,6 +1,5 @@
 ﻿namespace PhoneBook
 
-open System
 open System.Text.RegularExpressions
 
 module PhoneBook =
