@@ -24,7 +24,7 @@ let comparePersons (p1 : Person)  (p2 : Person) =
 [<Test>]
 let ``test add record basic`` () =
     let person = {Name = "Julia"; Number = "+79110606382"} 
-    let newData = addRecord person data
+    let newData = fst (addRecord person data)
     let correctResult = List.sortWith comparePersons [{Name = "Tom"; Number = "89019892909"};
         {Name = "Alice"; Number = "83890198101"};
         {Name = "John"; Number = "82839281789"};

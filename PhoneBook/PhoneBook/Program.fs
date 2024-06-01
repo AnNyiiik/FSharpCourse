@@ -36,13 +36,12 @@ let rec addNewRecord data =
         printfn "incorrect name, try again\n"
         addNewRecord data
     else
-        try
-            let person = {Name = personData.[0]; Number = personData.[1]}
-            addRecord person data
-        with
-        | :? ArgumentException ->
-            printfn "this number already exist\n"
-            data
+        let person = {Name = personData.[0]; Number = personData.[1]}
+        match (addRecord person data) with
+        | (d, Some v) -> d
+        | (d, None) ->
+            printf "the number already exists"
+            d
             
 ///Find name by existed number
 let rec findName data =
