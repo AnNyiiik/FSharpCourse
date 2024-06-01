@@ -1,4 +1,5 @@
 ﻿namespace PhoneBook
+
 open System
 open System.Text.RegularExpressions
 
@@ -6,9 +7,10 @@ module PhoneBook =
 
     type Person = { Name: string; Number: string }
 
-    let phone_regex () = Regex(@"(\+7|7|8)+\d{10}", RegexOptions.Compiled)
-    let name_regex () = Regex(@"[A-Z][a-z]+", RegexOptions.Compiled)
+    let phoneRegex () = Regex(@"(\+7|7|8)+\d{10}", RegexOptions.Compiled)
+    let nameRegex () = Regex(@"[A-Z][a-z]+", RegexOptions.Compiled)
 
+    ///Add new record to the data
     let addRecord (person : Person) data =
         if List.exists(fun (p : Person) -> p.Number = person.Number) data
         then
@@ -16,6 +18,7 @@ module PhoneBook =
             data
         else person :: data
 
+    ///Find by phone a name of a person
     let findByPhone phone data =
         let result = List.tryFind(fun (p : Person) -> p.Number = phone) data
 
@@ -23,6 +26,7 @@ module PhoneBook =
         | Some p -> Some p.Name
         | None -> None
 
+    ///Find a phone by name
     let findByName name data =
         let result = List.tryFind(fun (p : Person) -> p.Name = name) data
         
@@ -30,24 +34,24 @@ module PhoneBook =
         | Some p -> Some p.Number
         | None -> None
 
+    ///Convert all the data to string
     let convertDataToString data =
-        let rec convert data result =
-            match data with
-            | [] -> result
-            | (head : Person) :: tail -> convert tail (String.concat " " [result; head.Name; head.Number; "\n"])
-        convert data String.Empty
+        data 
+        |> List.fold (fun acc person -> 
+                            acc + $"{person.Name} {person.Number}\n") "" 
 
+    ///Parse data from string and create list of records
     let fill (personsString : string) data =
 
         let persons = personsString.Split('\n')
         let rec addPersons (persons : list<string>) data =
             match persons with
-            | [] -> data
+            | [] -> Some data
             | head :: tail ->
                 let personData = (head.ToString()).Split([|' '|])
                 let newPerson = {Name = personData.[0]; Number = personData.[1]}
-                if not (phone_regex().IsMatch(personData.[1]) && name_regex().IsMatch(personData.[0])) then
-                    invalidArg "" "incorrect data format"
-                if (personData.Length) = 2 then addPersons tail (newPerson :: data)
-                    else invalidArg "" "shold be 2 values per person"
+                if not (phoneRegex().IsMatch(personData.[1]) && nameRegex().IsMatch(personData.[0])) then
+                    None
+                else if (personData.Length) = 2 then addPersons tail (newPerson :: data)
+                    else None
         addPersons (Seq.toList persons) data

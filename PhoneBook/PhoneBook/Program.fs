@@ -10,6 +10,7 @@ To see all saved data press 4
 To save all existed data to file press 5
 To read data from file and save it to phone book press 6:\n"
 
+///Parse comand code and check if the value is appropriate
 let parseCommandCode () =
     printfn "enter a command code:\n"
     let mutable code = 0
@@ -20,6 +21,7 @@ let parseCommandCode () =
     
     Some code
 
+///Add record to the existed records
 let rec ``add record`` data =
     printfn "Enter name & phone: \n"
     let personData = Console.ReadLine().Split()
@@ -27,10 +29,10 @@ let rec ``add record`` data =
         printfn "incorrect data, should be 2 items, try again\n"
         ``add record`` data
 
-    else if not (phone_regex().IsMatch(personData.[1])) then
+    else if not (phoneRegex().IsMatch(personData.[1])) then
         printfn "incorrect phone number, try again\n"
         ``add record`` data
-    else if not (name_regex().IsMatch(personData.[0])) then
+    else if not (nameRegex().IsMatch(personData.[0])) then
         printfn "incorrect name, try again\n"
         ``add record`` data
     else
@@ -42,11 +44,11 @@ let rec ``add record`` data =
             printfn "this number already exist\n"
             data
             
-
+///Find name by existed number
 let rec ``find name`` data =
     printfn "enter the phone:\n"
     let phone = Console.ReadLine()
-    if not(phone_regex().IsMatch(phone)) then
+    if not(phoneRegex().IsMatch(phone)) then
         printfn "incorrect data, try again\n"
         ``find name`` data
     else
@@ -54,10 +56,11 @@ let rec ``find name`` data =
         | None -> printfn "%s" "there is no such name\n"
         | Some name -> printfn "%s" (name.ToString())
 
+///Find phone by name, return first coinsidence
 let rec ``find phone`` data =
     printfn "enter the name:\n"
     let name = Console.ReadLine()
-    if not(name_regex().IsMatch(name)) then
+    if not(nameRegex().IsMatch(name)) then
         printfn "incorrect data, try again\n"
         ``find phone`` data
     else
@@ -65,22 +68,25 @@ let rec ``find phone`` data =
         | None -> printfn "%s" "there is no such name\n"
         | Some name -> printfn "%s" (name.ToString())
 
+///Write all the data to file
 let ``write to file`` data =
     let path = "dataWrite.txt"
     use fileWriter = new StreamWriter(path)
     let dataToWrite = convertDataToString data
     fileWriter.Write(dataToWrite)
 
+///Read the data from file
 let ``read from file`` data =
     let path = "dataRead.txt"
     use fileReader = new StreamReader(path)
     let readData = fileReader.ReadToEnd()
     fill readData data
 
+///Process the continious loop of commands 
 let rec runLoop data =
 
     match parseCommandCode() with
-    | None | Some 0 -> data
+    | None | Some 0 -> Some data
     | Some 1 ->
         runLoop (``add record`` data)
     | Some 2  ->
@@ -95,8 +101,13 @@ let rec runLoop data =
     | Some 5 ->
         ``write to file`` data
         runLoop data
-    | Some 6 -> 
-        runLoop (``read from file`` data)
+    | Some 6 ->
+        match (``read from file`` data) with
+        | None ->
+            printf "incorrect data format in input file\n"
+            None
+        | Some data ->
+            runLoop data
     | _ ->
         printfn "incorrect command code:\n"
         runLoop data

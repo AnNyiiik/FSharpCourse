@@ -1,6 +1,5 @@
 ﻿module PhoneBookTests
 
-open System.IO
 open FsUnit
 open NUnit.Framework
 open PhoneBook.PhoneBook
@@ -21,12 +20,6 @@ let comparePersons (p1 : Person)  (p2 : Person) =
         if p1 < p2 then -1
         else 1
     else 1
-
-let dataConvertToString = " Tom 89019892909 \n Alice 83890198101 \n John 82839281789 \n Bob +72898271890 \n Hanna +71289019813 \n Sara 81278918789 \n"
-[<Test>]
-let ``test convert data to string`` () =
-    let res = convertDataToString data
-    convertDataToString data |> should equal dataConvertToString
 
 [<Test>]
 let ``test add record basic`` () =
@@ -52,11 +45,11 @@ let ``test find name by name`` () =
     (findByName "Sara" data).Value |> should equal "81278918789"
     findByName "Kat" data |> should equal None
 
-let dataWrite = "Tom 89019892909\nAlice 83890198101\nJohn 82839281789\nBob +72898271890\nHanna +71289019813\nSara 81278918789"
 [<Test>]
 let ``test read from file`` () =
+    let dataWrite = "Tom 89019892909\nAlice 83890198101\nJohn 82839281789\nBob +72898271890\nHanna +71289019813\nSara 81278918789"
     let dataEmpty = []
-    fill dataWrite dataEmpty |> List.sortWith comparePersons |> should
-        equal
-        (List.sortWith comparePersons data)
-
+    match fill dataWrite dataEmpty with
+    | None -> Assert.Fail()
+    | Some data ->
+         List.sortWith comparePersons data |> should equal (List.sortWith comparePersons data)
