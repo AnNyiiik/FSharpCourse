@@ -21,7 +21,7 @@ let ``alphaConvert`` () =
 let ``check substitute`` () =
     let expr = Abstraction ("x", Application (Variable "x", Variable "y"))
     let value = Abstraction ("y", Variable "y")
-    let expected = Abstraction ("x", Application (Variable "x", Abstraction ("y'", Variable "y'")))
+    let expected = Abstraction ("x", Application (Variable "x", Abstraction ("y", Variable "y")))
     substitute "y" value expr |> should equal expected
 
 [<Test>]
