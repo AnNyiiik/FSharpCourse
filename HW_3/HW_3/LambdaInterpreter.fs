@@ -2,6 +2,7 @@
 
 module LambdaInterpreter =
 
+    /// <summary>The type which expresses the lambda-term.</summary>
     type LambdaTerm =
         | Variable of string
         | Abstraction of string * LambdaTerm
@@ -17,7 +18,7 @@ module LambdaInterpreter =
         | Abstraction (v, body) ->
             if v = variable then true else isVaraibleInExpression variable body
         | Application (e1, e2) ->
-            (isVaraibleInExpression variable e1) || (isVaraibleInExpression variable e2)
+            isVaraibleInExpression variable e1 || isVaraibleInExpression variable e2
 
     /// <summary>Checks if the particular variable is bounded in the expression.</summary>
     /// <param name="variable">The variable name.</param>
@@ -32,7 +33,7 @@ module LambdaInterpreter =
                     if v = variable then false
                     else isFreeVariableRec variable (v :: bounded) body
                 | Application (e1, e2) -> 
-                    (isFreeVariableRec variable bounded e1) || (isFreeVariableRec variable bounded e2)
+                    isFreeVariableRec variable bounded e1 || isFreeVariableRec variable bounded e2
         isFreeVariableRec variable [] expression 
 
     /// <summary>Performes the alpha-conversion of a given lambda-term if it's possible.</summary>
@@ -57,16 +58,22 @@ module LambdaInterpreter =
             let e2Converted = alphaConvert oldName newName e2
             Application (e1Converted, e2Converted)
 
-    ///<summary>Renames a variable so that new name wasn't the .</summary>
-    ///<param name="oldName">The variable name which should be substituted with a new one.</param>
-    ///<param name="newName">The new name of a substituted variable.</param>
-    ///<returns>The lambda-term after alpha-conversion.</returns>
+    ///<summary>Renames a variable in beta-reduction.</summary>
+    ///<param name="v">The variable name which should be renamed.</param>
+    ///<param name="value">The value of a term which substitudes the variable in expression.</param>
+    ///<param name="expression">The expression in which the substitution is.</param>
+    ///<returns>The new name of a variable.</returns>
     let rec renameVariable (v: string) (value: LambdaTerm) (expression : LambdaTerm) : string =
         if isFreeVariable v value || isFreeVariable v expression then
             renameVariable (v + "'") value expression
         else
             v
-    
+
+    ///<summary>Performes a substitution in the lambda-expression.</summary>
+    ///<param name="variable">The name of a variable which should be substituted with a given term.</param>
+    ///<param name="value">The value of a term which substitudes the variable in expression.</param>
+    ///<param name="expression">The expression in which the substitution is.</param>
+    ///<returns>The expression with a substituted variable if it's possible.</returns>
     let rec substitute (variable: string) (value: LambdaTerm) (expression: LambdaTerm) : LambdaTerm =
         match expression with
         | Variable v ->
@@ -85,6 +92,9 @@ module LambdaInterpreter =
         | Application (e1, e2) -> 
             Application (substitute variable value e1, substitute variable value e2)
 
+    ///<summary>Performes a one step of beta-reduction.</summary>
+    ///<param name="expression">The expression in which the beta-reduction is.</param>
+    ///<returns>The expression which is received after one step of beta-reduction of an initial expression.</returns>
     let rec betaReduceOneStep (expression: LambdaTerm) : LambdaTerm =
         match expression with
         | Application (Abstraction (v, body), arg) -> substitute v arg body
@@ -99,7 +109,10 @@ module LambdaInterpreter =
             else 
                 Abstraction (v, body)
         | _ -> expression 
-    
+
+    ///<summary>Performes a beta-reduction in lambda-term according to a normal strategy.</summary>
+    ///<param name="expression">The expression in which the beta-reduction is.</param>
+    ///<returns>The expression which is received after beta-reduction of an initial expression.</returns>
     let rec betaReduceNormal (expression: LambdaTerm) : LambdaTerm =
         let reduced = betaReduceOneStep expression
         if reduced = expression then expression else betaReduceNormal reduced

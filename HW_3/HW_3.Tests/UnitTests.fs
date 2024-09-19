@@ -26,9 +26,10 @@ let ``check substitute`` () =
 
 [<Test>]
 let ``betaReduceOneStep`` () =
-    let expr = Application (
-                    Abstraction ("x",
-                        Application (Variable "x", Variable "y")), Variable "z")
+    let expr =
+        Application (
+            Abstraction ("x",
+                Application (Variable "x", Variable "y")), Variable "z")
 
     let expected = Application (Variable "z", Variable "y")
     betaReduceOneStep expr |> should equal expected
