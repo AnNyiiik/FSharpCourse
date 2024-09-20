@@ -36,10 +36,11 @@ let ``betaReduceOneStep`` () =
 
 [<Test>]
 let ``betaReduceNormal basic`` () =
-    let expr = Application (
-                    Abstraction ("x",
-                        Abstraction ("y",
-                            Application (Variable "x", Variable "y"))), Variable "z")
+    let expr =
+        Application (
+            Abstraction ("x",
+                Abstraction ("y",
+                    Application (Variable "x", Variable "y"))), Variable "z")
 
     let expected = Abstraction ("y", Application (Variable "z", Variable "y"))
     betaReduceNormal expr |> should equal expected
@@ -50,7 +51,7 @@ let ``betaReduceNormal complex`` () =
     let expr = 
         Application (
             Abstraction ("x", (Abstraction("y", Application( Variable "x", Variable "y")))),
-            Abstraction ("z", Variable "z"))
+                Abstraction ("z", Variable "z"))
         
     let expected = 
         Abstraction ("y", Variable "y")
