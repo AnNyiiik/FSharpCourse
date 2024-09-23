@@ -2,42 +2,42 @@
 
 module LambdaInterpreter =
 
-    /// <summary>The type which expresses the lambda-term.</summary>
+    ///The type which expresses the lambda-term.
     type LambdaTerm =
         | Variable of string
         | Abstraction of string * LambdaTerm
         | Application of LambdaTerm * LambdaTerm
 
-    /// <summary>Checks if the particular variable is contained in the expression.</summary>
-    /// <param name="variable">The variable name.</param>
+    ///<summary>Checks if the particular variable is contained in the expression.</summary>
+    ///<param name="variable">The variable name.</param>
     ///<param name="expression">The lambda-term of an expression.</param>
     ///<returns>The truth if the variable is in the expression, otherwise false.</returns>
-    let rec isVaraibleInExpression (variable: string) (expression: LambdaTerm) : bool =
+    let rec isVariableInExpression (variable: string) (expression: LambdaTerm) : bool =
         match expression with
         | Variable v -> v = variable
         | Abstraction (v, body) ->
-            if v = variable then true else isVaraibleInExpression variable body
+            if v = variable then true else isVariableInExpression variable body
         | Application (e1, e2) ->
-            isVaraibleInExpression variable e1 || isVaraibleInExpression variable e2
+            isVariableInExpression variable e1 || isVariableInExpression variable e2
 
-    /// <summary>Checks if the particular variable is bounded in the expression.</summary>
-    /// <param name="variable">The variable name.</param>
+    ///<summary>Checks if the particular variable is bounded in the expression.</summary>
+    ///<param name="variable">The variable name.</param>
     ///<param name="expression">The lambda-term of an expression.</param>
     ///<returns>The truth if the variable is bounded, otherwise false.</returns>
     let isFreeVariable (variable: string) (expression: LambdaTerm) : bool =
-        let rec isFreeVariableRec (variable: string) (bounded : string list) (expression: LambdaTerm): bool =
-            if not (isVaraibleInExpression variable expression) then false else 
+        let rec isFreeVariableRec (variable: string) (bound : string list) (expression: LambdaTerm): bool =
+            if not (isVariableInExpression variable expression) then false else 
                 match expression with
-                | Variable v -> not (List.contains variable bounded) 
+                | Variable v -> not (List.contains variable bound) 
                 | Abstraction (v, body) -> 
                     if v = variable then false
-                    else isFreeVariableRec variable (v :: bounded) body
+                    else isFreeVariableRec variable (v :: bound) body
                 | Application (e1, e2) -> 
-                    isFreeVariableRec variable bounded e1 || isFreeVariableRec variable bounded e2
+                    isFreeVariableRec variable bound e1 || isFreeVariableRec variable bound e2
         isFreeVariableRec variable [] expression 
 
-    /// <summary>Performes the alpha-conversion of a given lambda-term if it's possible.</summary>
-    /// <param name="oldName">The variable name which should be substituted with a new one.</param>
+    ///<summary>Performes the alpha-conversion of a given lambda-term if it's possible.</summary>
+    ///<param name="oldName">The variable name which should be substituted with a new one.</param>
     ///<param name="newName">The new name of a substituted variable.</param>
     ///<returns>The lambda-term after alpha-conversion.</returns>
     let rec alphaConvert (oldName: string) (newName: string) (term: LambdaTerm) : LambdaTerm =
@@ -92,7 +92,7 @@ module LambdaInterpreter =
         | Application (e1, e2) -> 
             Application (substitute variable value e1, substitute variable value e2)
 
-    ///<summary>Performes a one step of beta-reduction.</summary>
+    ///<summary>Performs a one step of beta-reduction.</summary>
     ///<param name="expression">The expression in which the beta-reduction is.</param>
     ///<returns>The expression which is received after one step of beta-reduction of an initial expression.</returns>
     let rec betaReduceOneStep (expression: LambdaTerm) : LambdaTerm =

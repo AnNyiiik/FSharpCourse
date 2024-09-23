@@ -47,11 +47,11 @@ let ``betaReduceNormal basic`` () =
 
 [<Test>]
 let ``betaReduceNormal complex`` () =
-    
     let expr = 
         Application (
-            Abstraction ("x", (Abstraction("y", Application( Variable "x", Variable "y")))),
-                Abstraction ("z", Variable "z"))
+            Abstraction ("x",
+                (Abstraction("y", Application( Variable "x", Variable "y")))),
+                    Abstraction ("z", Variable "z"))
         
     let expected = 
         Abstraction ("y", Variable "y")
